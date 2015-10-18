@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hello</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+var id,sum,bet,game;
+
+
+function goToCab() {
+	id= $("input").val();
+	var info =  $("#info");
+	if(id==""){
+		info.text("Please enter id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id
+		}).always(function(data) {
+			if(data.Problem)
+				info.text('Problem: '+data.Problem);
+			else
+				info.text('Your id: '+data.ID+' Your name: '+ data.name+' Balance: '+data.Balance);
+		});
+}
+function refill(){
+	id= $("#id").val();
+	sum=$('#sum').val();
+	var info =  $("#info");
+	if(id==""|sum==""){
+		info.text("Please enter sum and id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id+"/refill/"+sum,
+		  method: "POST"
+		}).always(function(data) {
+		 
+		});
+}
+function createGame(){
+	id= $("#id").val();
+	bet=$('#bet').val();
+	var info =  $("#info");
+	if(id==""|bet==""){
+		info.text("Please enter bet and id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id+"/newgame/"+bet
+		}).always(function(data) {
+			if(data.Problem)
+				info.text(data.Problem);
+			else
+		 		$('#game').val(data.gameID);
+		});
+}
+function play(){
+	id= $("#id").val();
+	game=$('#game').val();
+	var gameInfo = $('#gameInfo');
+	if(id==""|game==""){
+		gameInfo.text("Please enter Game# and id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id+"/"+game
+		}).always(function(data) {
+			//console.log(data);
+			gameInfo.text(JSON.stringify(data));
+		});
+	
+}
+function hit(){
+	id= $("#id").val();
+	game=$('#game').val();
+	var gameInfo = $('#gameInfo');
+	if(id==""|game==""){
+		gameInfo.text("Please enter Game# and id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id+"/"+game+"/hit",
+		  method: "POST"
+		}).always(function(data) {
+			//console.log(data);
+			gameInfo.text(JSON.stringify(data));
+		});
+	
+}
+function stand(){
+	id= $("#id").val();
+	game=$('#game').val();
+	var gameInfo = $('#gameInfo');
+	if(id==""|game==""){
+		gameInfo.text("Please enter Game# and id");
+		return;
+	}
+	$.ajax({
+		  url: "http://localhost:8080/BJREST/"+id+"/"+game+"/stand",
+		  method: "POST"
+		}).always(function(data) {
+			//console.log(data);
+			gameInfo.text(JSON.stringify(data));
+		});
+	
+}
+</script>
+</head>
+<body>
+<label>Enter your id: </label><input id="id" type="text"></input>
+<button onclick="goToCab();">Enter</button>
+<br>
+<hr>
+<p id="info"></p>
+<hr>
+<label>Refill on: </label><input id="sum" type="text"></input>
+<button onclick="refill();">Refill</button>
+<br>
+<hr>
+<label>Your bet: </label><input id="bet" type="text"></input>
+<button onclick="createGame();">Create</button>
+<label>Game #: </label><input id="game" type="text"></input>
+<button onclick="play();">Play</button>
+<br>
+<hr>
+<p id="gameInfo"></p>
+<button onclick="hit();">Hit</button>
+<button onclick="stand();">Stand</button>
+<hr>
+</body>
+</html>
