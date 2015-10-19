@@ -28,6 +28,7 @@ import net.ukr.steblina.bj.CardsInHandPlayer;
 import net.ukr.steblina.bj.Deck;
 import net.ukr.steblina.bj.Game;
 import net.ukr.steblina.db.DBFactory;
+import net.ukr.steblina.db.GameLog;
 import net.ukr.steblina.db.User;
 
 @Path("/")				
@@ -93,10 +94,10 @@ public class IncomRequest {
 		if(playersCards==null||dealersCards==null){
 			playersCards = new CardsInHandPlayer();	
 			dealersCards= new CardsInHandDealer();
-			playersCards.addCard(deck.deck.remove(0));
-			dealersCards.addCard(deck.deck.remove(0));
-			playersCards.addCard(deck.deck.remove(0));
-			dealersCards.addCard(deck.deck.remove(0));
+			playersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.PLAYER, "First card"));
+			dealersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.DEALER, "First card"));
+			playersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.PLAYER, "Second card"));
+			dealersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.DEALER, "Second hidden card"));
 			}
 		
 		try {
@@ -135,12 +136,12 @@ public class IncomRequest {
 		}
 		int pPoints =playersCards.getPoints();
 		if(pPoints<21){
-			playersCards.addCard(deck.deck.remove(0));
+			playersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.PLAYER, "Hit"));
 		}
 		pPoints =playersCards.getPoints();
 		if(pPoints>=21){
 			status="Dealer Game";
-			Game.dealerGame(dealersCards, deck);
+			Game.dealerGame(dealersCards, deck,gameID,userId);
 			switch(Game.getWinner(playersCards.getPoints(), dealersCards.getPoints())){
 			case Game.PUSH:
 				winner="PUSH";
@@ -186,8 +187,9 @@ public class IncomRequest {
 		if(deck==null){
 			return returnJsonInfo("Problem", "Game does not exist").build();
 		}
+		GameLog.updateLog(null, gameID, userId, Game.PLAYER, "Stand");
 		status="Dealer Game";
-		Game.dealerGame(dealersCards, deck);
+		Game.dealerGame(dealersCards, deck,gameID,userId);
 		switch(Game.getWinner(playersCards.getPoints(), dealersCards.getPoints())){
 			case Game.PUSH:
 				winner="PUSH";

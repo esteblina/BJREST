@@ -89,10 +89,10 @@ public class TestGame {
 	
 	@Test	
 	public void testDealerGame(){
-		Game.dealerGame(dealersCards, deck);
+		Game.dealerGame(dealersCards, deck, gameId,1);
 		assertEquals(2, dealersCards.showCards().size());
 		assertEquals(17, dealersCards.getPoints());
-		Game.dealerGame(dealersCards3, deck);
+		Game.dealerGame(dealersCards3, deck,gameId2,1);
 		assertNotEquals(2, dealersCards3.showCards().size());
 	}
 	

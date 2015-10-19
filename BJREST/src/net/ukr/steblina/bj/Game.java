@@ -12,6 +12,7 @@ import javax.ws.rs.ForbiddenException;
 import org.hsqldb.types.Types;
 
 import net.ukr.steblina.db.DBFactory;
+import net.ukr.steblina.db.GameLog;
 
 public class Game {
 	/**
@@ -153,11 +154,11 @@ public class Game {
 		return result;
 	}
 	
-	public static void dealerGame(CardsInHandDealer dealersCards, Deck deck){
+	public static void dealerGame(CardsInHandDealer dealersCards, Deck deck,long gameID, long userId){
 		dealersCards.setVisible();
 		int dPoints =dealersCards.getPoints();
 		while(dPoints<17){
-			dealersCards.addCard(deck.deck.remove(0));
+			dealersCards.addCard(GameLog.updateLog(deck.deck.remove(0), gameID, userId, Game.DEALER, "Dealer game"));
 			dPoints=dealersCards.getPoints();
 		}
 	}
