@@ -122,7 +122,7 @@ public class Game {
 		return cards;
 	}
 	
-	public static void updateGame(long gameID, String status, String winner, CardsInHandPlayer playersCards, CardsInHandDealer dealersCards, Deck deck){
+	public static void updateGame(long gameID, String status, String winner, CardsInHandPlayer playersCards, CardsInHandDealer dealersCards, Deck deck) throws Exception{
 		Connection connection = DBFactory.getConnection();
 		try {
 			PreparedStatement prstUpdate = connection.prepareStatement("UPDATE games SET status='"+status+"', winner='"+winner+"', "+PLAYER+"=?, "+DEALER+"=?, deck=? WHERE ID="+gameID);
@@ -133,7 +133,7 @@ public class Game {
 			prstUpdate.close();
 			connection.close();
 		} catch (SQLException e) {
-		//TODO	throw new ("Can't save game"); 
+			throw new Exception("Can't save game"); 
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class Game {
 		}
 	}
 
-	public static void getWin(long userId, long gameID, double d) {
+	public static void getWin(long userId, long gameID, double d) throws Exception {
 		Connection connection = DBFactory.getConnection();
 		try {
 			Statement stUpdate = connection.createStatement();
@@ -179,8 +179,7 @@ public class Game {
 			stUpdate.close();
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new Exception("The problem with money transfer");
 		}
 		
 	}

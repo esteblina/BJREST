@@ -29,7 +29,6 @@ public class User {
 		ResultSet rs = null;
 		
 		try {
-			// query from the db
 			rs = connection.prepareStatement("select name, balance, added from users where id='"+id+"';").executeQuery();
 			while(rs.next()){
 			this.id=id;

@@ -6,16 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Deck implements Serializable{
-/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2059414679976854119L;
-/*	spades-пики, clubs-трефы,hearts-черви,diamonds-бубны...
-	туз-ace
-	король-king
-	дама - queen
-	валет-knave, Jack 
-	джокер -joker*/
+
 	public List<Card> deck = new LinkedList<Card>();
 	private final String[] ranks={"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
 	private final String[] colors={"Spades","Clubs","Hearts","Diamonds"};

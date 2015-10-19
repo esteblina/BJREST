@@ -50,7 +50,6 @@ public class IncomRequest {
 			return  returnJsonInfo("Problem", "User does not exist").build();
 		JsonObject json =user.getJsonObject();
 		
-		//System.out.println(json);
 		return json;
 		
 	}
@@ -110,8 +109,7 @@ public class IncomRequest {
 			pst.close();
 			connection.close();
 		} catch (SQLException e) {
-			System.err.println("Save game problem");
-			e.printStackTrace();
+			return returnJsonInfo("Problem", "Save game problem").build();
 		}
 		
 		return createJson(playersCards, dealersCards).build();
@@ -146,25 +144,45 @@ public class IncomRequest {
 			case Game.PUSH:
 				winner="PUSH";
 				status="Ended";
-				Game.getWin(userId, gameID, 1);
+				try {
+					Game.getWin(userId, gameID, 1);
+				} catch (Exception e1) {
+					return returnJsonInfo("Problem", e1.getMessage()).build();
+				}
 				break;
 			case Game.PLAYER_WIN:
 				winner="Player";
 				status="Ended";
 				if(playersCards.getPoints()==21)
-					Game.getWin(userId, gameID, 2.5);
+					try {
+						Game.getWin(userId, gameID, 2.5);
+					} catch (Exception e1) {
+						return returnJsonInfo("Problem", e1.getMessage()).build();
+					}
 				else
-					Game.getWin(userId, gameID, 2);
+					try {
+						Game.getWin(userId, gameID, 2);
+					} catch (Exception e1) {
+						return returnJsonInfo("Problem", e1.getMessage()).build();
+					}
 				break;
 			case Game.DEALER_WIN:
 				winner="Dealer";
 				status="Ended";
 				break;
 			}
-			Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+			try {
+				Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+			} catch (Exception e) {
+				return returnJsonInfo("Problem", e.getMessage()).build();
+			}
 			return createJson(playersCards, dealersCards).add("Winner", winner).build();
 		}else{
-			Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+			try {
+				Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+			} catch (Exception e) {
+				return returnJsonInfo("Problem", e.getMessage()).build();
+			}
 			return createJson(playersCards, dealersCards).build();
 		}
 		
@@ -194,22 +212,38 @@ public class IncomRequest {
 			case Game.PUSH:
 				winner="PUSH";
 				status="Ended";
+			try {
 				Game.getWin(userId, gameID, 1);
+			} catch (Exception e1) {
+				return returnJsonInfo("Problem", e1.getMessage()).build();
+			}
 				break;
 			case Game.PLAYER_WIN:
 				winner="Player";
 				status="Ended";
 				if(playersCards.getPoints()==21)
-					Game.getWin(userId, gameID, 2.5);
+					try {
+						Game.getWin(userId, gameID, 2.5);
+					} catch (Exception e1) {
+						return returnJsonInfo("Problem", e1.getMessage()).build();
+					}
 				else
-					Game.getWin(userId, gameID, 2);
+					try {
+						Game.getWin(userId, gameID, 2);
+					} catch (Exception e1) {
+						return returnJsonInfo("Problem", e1.getMessage()).build();
+					}
 				break;
 			case Game.DEALER_WIN:
 				winner="Dealer";
 				status="Ended";
 				break;
 		}
-		Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+		try {
+			Game.updateGame(gameID, status, winner, playersCards, dealersCards, deck);
+		} catch (Exception e) {
+			return returnJsonInfo("Problem", "Update game faild").build();
+		}
 		return createJson(playersCards, dealersCards).add("Winner", winner).build();
 		
 	}

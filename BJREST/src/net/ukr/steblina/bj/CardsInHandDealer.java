@@ -6,9 +6,6 @@ import java.util.List;
 
 public class CardsInHandDealer implements CardsInHand, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7009773724131049617L;
 	private List<Card> inHand = new ArrayList<Card>();
 	private boolean hidden=true;
